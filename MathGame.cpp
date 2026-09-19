@@ -97,13 +97,20 @@ void QustionSet(stGame game, stQuestion& question)
 {
 	question.Number1 = QuestionLevelRange(game.QuestionLevel);
 	question.Number2 = QuestionLevelRange(game.QuestionLevel);
-
-	if (game.OperationType == Mixed)
+	auto temp = question.Number1;
+	if (game.OperationType == Mixed) {
 		question.Operation = GetRandomOperation();
-	else
+	} else if (game.OperationType == DIVISION) {
+		if (question.Number1 < question.Number2) {
+			question.Number1 = question.Number2;
+			question.Number2 = temp;
+		}
 		question.Operation = game.OperationType;
-
-	cout << question.Number1 << endl << OperationSymbol(question.Operation) << " " << question.Number2 << endl << "-----------" << endl;
+	} else {
+		question.Operation = game.OperationType;
+	}
+		
+	cout << question.Number1 << " " << OperationSymbol(question.Operation) << " " << question.Number2 << endl << "-----------" << endl;
 }
 void DoMath(stQuestion& question) {
 	question.CorrectAnswer = CalculateAnswer(question.Number1, question.Number2, question.Operation);
